@@ -73,6 +73,14 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
 });
 
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  if (book) {
+        delete book.reviews[username];
+        return res.status(200).json(book);
+    }
+    return res.status(404).json({ message: "Invalid ISBN" });
+});
+
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
 module.exports.users = users;
