@@ -10,7 +10,7 @@ public_users.post("/register", (req,res) => {
   const password = req.body.password;
 
   if (username && password) {
-    if (!doesExist(username)) { 
+    if (!isValid(username)) { 
       users.push({"username":username,"password":password});
       return res.status(200).json({message: "User successfully registred. Now you can login"});
     } else {
@@ -22,29 +22,61 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  res.send(JSON.stringify(books,null,4));
+public_users.get('/books',function (req, res) {
+
+    const get_books = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books}, null, 4)));
+      });
+
+      get_books.then(() => console.log("Promise for Task 10 resolved"));
+
   //Write your code here
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-   const isbn = req.params.isbn;
-res.send(books[isbn])
-  //Write your code here
+    const get_books_isbn = new Promise((resolve, reject) => {
+        resolve(res.send(JSON.stringify({books_isbn}, null, 4)));
+      });
+
+      get_books_isbn.then(() => console.log("Promise for Task  resolved"));
  });
+  //Write your code here
+
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  const author = req.params.author;
-res.send(books[author])
+    let booksbyauthor = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["author"] === req.params.author) {
+        booksbyauthor.push({"isbn":isbn,
+        "author":books[isbn]["author"],
+                            "title":books[isbn]["title"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbyauthor}, null, 4));
+ 
+  
   //Write your code here
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  const title = req.params.title;
-res.send(books[title])
+    let booksbytitle = [];
+    let isbns = Object.keys(books);
+    isbns.forEach((isbn) => {
+      if(books[isbn]["title"] === req.params.title) {
+        booksbytitle.push({"isbn":isbn,
+                            "author":books[isbn]["author"],
+                            "title":books[isbn]["title"],
+                            "reviews":books[isbn]["reviews"]});
+      }
+    });
+    res.send(JSON.stringify({booksbytitle}, null, 4));
+
+
   //Write your code here
 });
 
