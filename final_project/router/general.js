@@ -51,7 +51,7 @@ res.send(books[title])
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
-res.send(books[isbn])
+res.send(books[isbn]["reviews"])
   //Write your code here
 });
 
