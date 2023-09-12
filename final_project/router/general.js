@@ -34,31 +34,47 @@ public_users.get('/books',function (req, res) {
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
-    const get_books_isbn = new Promise((resolve, reject) => {
-        resolve(res.send(JSON.stringify({books_isbn}, null, 4)));
-      });
+  public_users.get('/isbn/:isbn', async function (req, res) {
+  try {
+    await new Promise(resolve => setTimeout(resolve, 120));
+    res.send(JSON.stringify({ isbn }, null, 4));
+  } catch (error) {
+    console.error("Error while getting book on isbn:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
-      get_books_isbn.then(() => console.log("Promise for Task  resolved"));
- });
   //Write your code here
 
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/books/author/:author',function (req, res) {
+
+    const get_books_author = new Promise((resolve, reject) => {
+
     let booksbyauthor = [];
     let isbns = Object.keys(books);
     isbns.forEach((isbn) => {
       if(books[isbn]["author"] === req.params.author) {
         booksbyauthor.push({"isbn":isbn,
-        "author":books[isbn]["author"],
                             "title":books[isbn]["title"],
                             "reviews":books[isbn]["reviews"]});
+      resolve(res.send(JSON.stringify({booksbyauthor}, null, 4)));
       }
+
+
     });
-    res.send(JSON.stringify({booksbyauthor}, null, 4));
- 
-  
+    reject(res.send("The mentioned author does not exist "))
+        
+    });
+
+    get_books_author.then(function(){
+            console.log("Promise is resolved");
+   }).catch(function () { 
+                console.log('The mentioned author does not exist');
+  });
+
+  });
   //Write your code here
 });
 
