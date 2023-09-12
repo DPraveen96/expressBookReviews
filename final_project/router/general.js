@@ -74,7 +74,6 @@ public_users.get('/books/author/:author',function (req, res) {
                 console.log('The mentioned author does not exist');
   });
 
-  });
   //Write your code here
 });
 
