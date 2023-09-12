@@ -13,8 +13,7 @@ const isValid = (username)=>{
     return true;
   } else {
     return false;
-  }//returns boolean
-//write code to check is the username is valid
+  }
 }
 
 const authenticatedUser = (username,password)=>{ 
@@ -26,8 +25,6 @@ const authenticatedUser = (username,password)=>{
   } else {
     return false;
   }
-}//returns boolean
-//write code to check if username and password match the one we have in records.
 }
 
 //only registered users can login
@@ -74,11 +71,17 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
-  if (book) {
-        delete book.reviews[username];
-        return res.status(200).json(book);
+    const isbn = req.params.isbn;
+    let filtered_book = books[isbn]
+    if (filtered_book) {
+        let review = req.query.review;
+        let reviewer = req.session.authorization['username'];
+        if(review) {
+            delete book.reviews[username];
+            return res.status(200).json(review);
+        }    
+        res.send(`The review for the book with ISBN  ${isbn} has been deleted.`);
     }
-    return res.status(404).json({ message: "Invalid ISBN" });
 });
 
 module.exports.authenticated = regd_users;
